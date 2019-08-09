@@ -2,8 +2,8 @@ import React from "react";
 import { Animated, Text, View, ViewProps } from "react-native";
 
 class FadeInView extends React.Component<any, ViewProps> {
-  private state = {
-    fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
+  state = {
+    fadeAnim: new Animated.Value(0) // Initial value for opacity: 0
   };
 
   componentDidMount() {
@@ -12,7 +12,7 @@ class FadeInView extends React.Component<any, ViewProps> {
       this.state.fadeAnim, // The animated value to drive
       {
         toValue: 1, // Animate to opacity: 1 (opaque)
-        duration: 10000, // Make it take a while
+        duration: 10000 // Make it take a while
       }
     ).start(); // Starts the animation
   }
@@ -24,7 +24,7 @@ class FadeInView extends React.Component<any, ViewProps> {
       <Animated.View // Special animatable View
         style={{
           ...this.props.style,
-          opacity: fadeAnim, // Bind opacity to animated value
+          opacity: fadeAnim // Bind opacity to animated value
         }}
       >
         {this.props.children}

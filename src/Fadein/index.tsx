@@ -1,7 +1,10 @@
 import React from "react";
 import { Animated, Text, View, ViewProps } from "react-native";
 
-class FadeInView extends React.Component<any, ViewProps> {
+class FadeInView extends React.Component<
+  ViewProps,
+  { fadeAnim: Animated.Value }
+> {
   state = {
     fadeAnim: new Animated.Value(0) // Initial value for opacity: 0
   };
@@ -19,11 +22,11 @@ class FadeInView extends React.Component<any, ViewProps> {
 
   render() {
     let { fadeAnim } = this.state;
-
+    const style: object = this.props.style || {};
     return (
       <Animated.View // Special animatable View
         style={{
-          ...this.props.style,
+          ...style,
           opacity: fadeAnim // Bind opacity to animated value
         }}
       >
@@ -34,7 +37,7 @@ class FadeInView extends React.Component<any, ViewProps> {
 }
 
 // You can then use your `FadeInView` in place of a `View` in your components:
-export default class App extends React.Component {
+export default class Fadein extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>

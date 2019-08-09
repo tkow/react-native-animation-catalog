@@ -1,5 +1,43 @@
 {
-  "editor.formatOnSave": true,
+  "editor.renderControlCharacters": true,
+  "window.zoomLevel": 0,
+  "prettier.jsxBracketSameLine": true,
+  "prettier.useTabs": false,
+  "prettier.tabWidth": 2,
+  "editor.tabSize": 2,
+  "typescript.updateImportsOnFileMove.enabled": "never",
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "[typescript]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": true
+  },
+  "[html]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": true
+  },
+  "files.trimTrailingWhitespace": true,
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/.rvm/**":true,
+    "**/node_modules/**": true,
+    "**/Library/**":true,
+    "**/GoogleDrive/**":true,
+    "**/Dropbox/**":true,
+    "**/.cocoapods/**":true,
+    "**/Pictures/**":true,
+    "**/.jest":true,
+    "**/.nativee-base-theme":true,
+    "**/.storybook":true,
+  },
+  "files.associations": {
+    "*.test.ts": "typescript",
+    "*.test.tsx": "typescript",
+    "*.spec.tsx": "typescript",
+    "*.spec.ts": "typescript"
+  },
   "eslint.autoFixOnSave": true,
   "eslint.validate": [
     "javascript",

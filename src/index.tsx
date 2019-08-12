@@ -8,7 +8,6 @@
 import React, {Fragment} from 'react';
 import MainNavigator from "./navigations";
 import { NavigationContainerComponent } from "react-navigation";
-// import Sample from "./components/sample";
 
 class Navigation extends React.Component<any> {
   private navigator: NavigationContainerComponent | null | undefined;

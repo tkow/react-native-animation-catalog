@@ -5,17 +5,22 @@ import {
   BottomTabBar,
 } from 'react-navigation';
 
-import {Fadein} from '../screens'
+import {Fadein,Banner} from '../screens'
 // TOP WINDOW
 
 const routeConfig = {
-
   Fadein: {
     screen: Fadein,
     navigationOptions: () => ({
       title: 'Fadein'
     })
-  }
+  },
+  Banner: {
+    screen: Banner,
+    navigationOptions: () => ({
+      title: 'Banner'
+    })
+  },
 };
 
 export const FooterNavigator = createAppContainer(

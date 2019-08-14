@@ -8,6 +8,7 @@ import {
 import { buttonContainerProps, styles } from "./style";
 
 export enum AnimatedStatus {
+  UNINITIALIZED,
   STOP,
   ANIMATING
 }
@@ -21,15 +22,24 @@ interface BottomBannerFormProps {
 
 export const BottomBanner = (props: BottomBannerFormProps) => {
   const [animParameters, setAnimationState] = useState({
+    status: AnimatedStatus.UNINITIALIZED,
     positionY: new Animated.Value(0),
     show: props.visible,
     opacity: new Animated.Value(0)
   });
   useEffect(() => {
-    props.onChangeAnimatedStatus &&
-      props.onChangeAnimatedStatus({ status: AnimatedStatus.ANIMATING });
-    if (props.visible) {
-      setAnimationState({ ...animParameters, show: true });
+    if (animParameters.status === AnimatedStatus.UNINITIALIZED) {
+      const nextStatus = { status: AnimatedStatus.STOP };
+      setAnimationState({ ...animParameters, ...nextStatus });
+      props.onChangeAnimatedStatus && props.onChangeAnimatedStatus(nextStatus);
+    } else if (props.visible) {
+      const nextStatus = { status: AnimatedStatus.ANIMATING };
+      setAnimationState({
+        ...animParameters,
+        ...nextStatus,
+        show: true
+      });
+      props.onChangeAnimatedStatus && props.onChangeAnimatedStatus(nextStatus);
       Animated.parallel([
         Animated.decay(animParameters.positionY, {
           velocity: -0.1
@@ -39,10 +49,22 @@ export const BottomBanner = (props: BottomBannerFormProps) => {
           duration: 1000
         })
       ]).start(() => {
+        const nextStatus = { status: AnimatedStatus.STOP };
+        setAnimationState({
+          ...animParameters,
+          ...nextStatus,
+          show: true
+        });
         props.onChangeAnimatedStatus &&
-          props.onChangeAnimatedStatus({ status: AnimatedStatus.STOP });
+          props.onChangeAnimatedStatus(nextStatus);
       });
     } else {
+      const nextStatus = { status: AnimatedStatus.ANIMATING };
+      setAnimationState({
+        ...animParameters,
+        ...nextStatus
+      });
+      props.onChangeAnimatedStatus && props.onChangeAnimatedStatus(nextStatus);
       setTimeout(() => {
         Animated.parallel([
           Animated.decay(animParameters.positionY, {
@@ -53,9 +75,14 @@ export const BottomBanner = (props: BottomBannerFormProps) => {
             duration: 1000
           })
         ]).start(() => {
-          setAnimationState({ ...animParameters, show: false });
+          const nextStatus = { status: AnimatedStatus.STOP };
+          setAnimationState({
+            ...animParameters,
+            ...nextStatus,
+            show: false
+          });
           props.onChangeAnimatedStatus &&
-            props.onChangeAnimatedStatus({ status: AnimatedStatus.STOP });
+            props.onChangeAnimatedStatus(nextStatus);
         });
       }, props.fadeOutDelay || 500);
     }

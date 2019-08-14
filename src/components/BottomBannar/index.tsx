@@ -1,86 +1,88 @@
-import React, {useState,useEffect} from 'react';
-import { Animated, GestureResponderEvent, Text, TouchableOpacity } from 'react-native';
-import { buttonContainerProps, styles } from './style';
+import React, { useState, useEffect } from "react";
+import {
+  Animated,
+  GestureResponderEvent,
+  Text,
+  TouchableOpacity
+} from "react-native";
+import { buttonContainerProps, styles } from "./style";
+
+export enum AnimatedStatus {
+  STOP,
+  ANIMATING
+}
 
 interface BottomBannerFormProps {
   visible?: boolean;
   onPress: (event: GestureResponderEvent) => void;
+  onChangeAnimatedStatus?: (params: { status: AnimatedStatus }) => void;
+  fadeOutDelay?: number;
 }
-
-
-const annimatedPopUp = (positionY: Animated.Value,visible?: boolean) => {
-  Animated.decay(positionY, {
-    velocity: visible ? 0.5 : -0.5,
-  }).start();
-}
-// const animConfig =
-//       this.current && this.props.reverseConfig
-//         ? this.props.reverseConfig
-//         : this.props.config;
-//     this.current = this.current ? 0 : 1;
-//     const config: Object = {
-//       ...animConfig,
-//       toValue: this.current,
-//     };
-
-//     Animated[this.props.type](this.state.native, {
-//       ...config,
-//       useNativeDriver: true,
-//     }).start();
-//     Animated[this.props.type](this.state.js, {
-//       ...config,
-//       useNativeDriver: false,
-//     }).start();
-
-    // type="decay"
-    // config={{velocity: 0.5}}
-    // reverseConfig={{velocity: -0.5}}>
-    // {anim => (
-    //   <Animated.View
-    //     style={[
-    //       styles.block,
-    //       {
-    //         transform: [
-    //           {
-    //             translateX: anim,
-    //           },
-    //         ],
-    //       },
-    //     ]}
-    //   />
-    // )}
-
 
 export const BottomBanner = (props: BottomBannerFormProps) => {
-  const [positionY,setPositionY] = useState(new Animated.Value(0))
-
-  useEffect(()=> {
-    annimatedPopUp(positionY,props.visible)
-  },[props.visible])
-  return (
+  const [animParameters, setAnimationState] = useState({
+    positionY: new Animated.Value(0),
+    show: props.visible,
+    opacity: new Animated.Value(0)
+  });
+  useEffect(() => {
+    props.onChangeAnimatedStatus &&
+      props.onChangeAnimatedStatus({ status: AnimatedStatus.ANIMATING });
+    if (!props.visible) {
+      setAnimationState({ ...animParameters, show: true });
+      Animated.parallel([
+        Animated.decay(animParameters.positionY, {
+          velocity: -0.1
+        }),
+        Animated.timing(animParameters.opacity, {
+          toValue: 1,
+          duration: 1000
+        })
+      ]).start(() => {
+        props.onChangeAnimatedStatus &&
+          props.onChangeAnimatedStatus({ status: AnimatedStatus.STOP });
+      });
+    } else if (props.visible) {
+      setTimeout(() => {
+        Animated.parallel([
+          Animated.decay(animParameters.positionY, {
+            velocity: 0.1
+          }),
+          Animated.timing(animParameters.opacity, {
+            toValue: 0,
+            duration: 1000
+          })
+        ]).start(() => {
+          setAnimationState({ ...animParameters, show: false });
+          props.onChangeAnimatedStatus &&
+            props.onChangeAnimatedStatus({ status: AnimatedStatus.STOP });
+        });
+      }, props.fadeOutDelay || 2000);
+    }
+  }, [props.visible]);
+  return animParameters.show ? (
     <Animated.View
       style={[
         styles.bottomBunnerLayout,
         {
+          opacity: animParameters.opacity,
           transform: [
             {
-              translateY: positionY
+              translateY: animParameters.positionY
             }
           ]
         }
       ]}
     >
-      <TouchableOpacity style={styles.buttonContainer} onPress={props.onPress} {...buttonContainerProps}>
-        <Text style={styles.buttonText}>
-          {
-            // I18n.t('応募する', '応募する')
-            'test'
-          }
-        </Text>
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={props.onPress}
+        {...buttonContainerProps}
+      >
+        <Text style={styles.buttonText}>{"test"}</Text>
       </TouchableOpacity>
     </Animated.View>
-  )
-  // ) : null;
+  ) : null;
 };
 
-BottomBanner.displayName = 'BottomBanner';
+BottomBanner.displayName = "BottomBanner";

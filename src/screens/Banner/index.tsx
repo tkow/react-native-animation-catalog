@@ -18,46 +18,51 @@ import throttle from "lodash/throttle";
 interface BannerAnimationProps {}
 
 export default (props: BannerAnimationProps) => {
-  const [bottomBanner, setBottomBanner] = useState<any>({
-    timer: null,
+  const [bottomBanner, setBottomBanner] = useState({
+    timerExists: false,
     visible: false,
     animatedStatus: AnimatedStatus.STOP
   });
 
   const [initialized, initialize] = useState(false);
 
-  useEffect(() => {
-    if (!initialized) {
-      initialize(true);
-    } else if (!bottomBanner.timerExists) {
-      // setBottomBanner({
-      //   ...bottomBanner,
-      //   timerExists: true
-      // });
-      const timer = setInterval(() => {
-        if (bottomBanner.animatedStatus === AnimatedStatus.STOP) {
-          clearInterval(timer);
-          setBottomBanner({
-            ...bottomBanner,
-            visible: false,
-            timerExists: false
-          });
-        }
-      }, 1000);
-    }
-  }, [bottomBanner.timerExists]);
+  // useEffect(() => {
+  //   if (!initialized) {
+  //     initialize(true);
+  //   } else if (!bottomBanner.timerExists) {
+  //     // setBottomBanner({
+  //     //   ...bottomBanner,
+  //     //   timerExists: true
+  //     // });
+  //     const timer = setInterval(() => {
+  //       if (
+  //         bottomBanner.animatedStatus === AnimatedStatus.FADEIN_STOP ||
+  //         bottomBanner.animatedStatus === AnimatedStatus.STOP
+  //       ) {
+  //         clearInterval(timer);
+  //         setBottomBanner({
+  //           ...bottomBanner,
+  //           visible: false,
+  //           timerExists: false
+  //         });
+  //       }
+  //     }, 1000);
+  //   }
+  // }, [bottomBanner.timerExists, bottomBanner.animatedStatus]);
 
   const onScrollBeginDrag = useCallback(
     throttle(e => {
+      debugger;
       if (bottomBanner.animatedStatus === AnimatedStatus.STOP) {
         setBottomBanner({ ...bottomBanner, visible: true });
       }
     }, 1000),
-    [bottomBanner.visible]
+    [bottomBanner.visible, bottomBanner.animatedStatus]
   );
 
   const onScrollEndDrag = useCallback(
-    debounce(e => {
+    throttle(e => {
+      debugger;
       if (!bottomBanner.timerExists) {
         setBottomBanner({
           ...bottomBanner,
@@ -65,14 +70,18 @@ export default (props: BannerAnimationProps) => {
         });
       }
     }, 1000),
-    [bottomBanner.visible]
+    [
+      bottomBanner.visible,
+      bottomBanner.animatedStatus,
+      bottomBanner.timerExists
+    ]
   );
 
   return (
     <Fragment>
       <ScrollView
-        onScrollBeginDrag={onScrollBeginDrag}
-        onScrollEndDrag={onScrollEndDrag}
+      // onScrollBeginDrag={onScrollBeginDrag}
+      // onScrollEndDrag={onScrollEndDrag}
       >
         <View
           style={{
@@ -84,7 +93,7 @@ export default (props: BannerAnimationProps) => {
         >
           <Button
             onPress={() => {
-              if (bottomBanner.animatedStatus === AnimatedStatus.STOP) {
+              if (bottomBanner.animatedStatus !== AnimatedStatus.ANIMATING) {
                 setBottomBanner({
                   ...bottomBanner,
                   visible: !bottomBanner.visible
@@ -101,6 +110,7 @@ export default (props: BannerAnimationProps) => {
           Alert.alert("test", "test");
         }}
         onChangeAnimatedStatus={result => {
+          debugger;
           setBottomBanner({ ...bottomBanner, animatedStatus: result.status });
         }}
       />

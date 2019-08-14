@@ -9,6 +9,7 @@ import { buttonContainerProps, styles } from "./style";
 
 export enum AnimatedStatus {
   UNINITIALIZED,
+  FADEIN_STOP,
   STOP,
   ANIMATING
 }
@@ -49,7 +50,7 @@ export const BottomBanner = (props: BottomBannerFormProps) => {
           duration: 1000
         })
       ]).start(() => {
-        const nextStatus = { status: AnimatedStatus.STOP };
+        const nextStatus = { status: AnimatedStatus.FADEIN_STOP };
         setAnimationState({
           ...animParameters,
           ...nextStatus,
@@ -75,6 +76,7 @@ export const BottomBanner = (props: BottomBannerFormProps) => {
             duration: 1000
           })
         ]).start(() => {
+          debugger;
           const nextStatus = { status: AnimatedStatus.STOP };
           setAnimationState({
             ...animParameters,

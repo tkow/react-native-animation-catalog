@@ -1,8 +1,17 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { BottomBanner, AnimatedStatus } from "../../components/BottomBannar";
 import Sample from "../../components/sample";
-import { Alert, ScrollView, View, Text, Animated, Easing } from "react-native";
+import {
+  Alert,
+  ScrollView,
+  View,
+  Text,
+  Animated,
+  Easing,
+  Button
+} from "react-native";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 interface BannerAnimationProps {}
 
@@ -13,31 +22,36 @@ export default (props: BannerAnimationProps) => {
     animatedStatus: AnimatedStatus.STOP
   });
 
+  // useEffect(() => {
+  //   if (!bottomBanner.timerExists) {
+  //     const timer = setInterval(() => {
+  //       if (bottomBanner.animatedStatus === AnimatedStatus.STOP) {
+  //         clearInterval(timer);
+  //         setBottomBanner({
+  //           ...bottomBanner,
+  //           visible: false,
+  //           timerExists: false
+  //         });
+  //       }
+  //     }, 1000);
+  //   }
+  // }, [bottomBanner.timerExists]);
+
   return (
     <Fragment>
       <ScrollView
-        onScrollBeginDrag={e => {
-          if (bottomBanner.animatedStatus === AnimatedStatus.STOP) {
-            setBottomBanner({ ...bottomBanner, visible: true });
-          }
-        }}
-        onScrollEndDrag={e => {
-          if (bottomBanner.animatedStatus === AnimatedStatus.STOP) {
-            setBottomBanner({ ...bottomBanner, visible: false });
-          } else if (!bottomBanner.timerExists) {
-            setBottomBanner({ ...bottomBanner, timerExists: true });
-            const timer = setInterval(() => {
-              if (bottomBanner.animatedStatus === AnimatedStatus.STOP) {
-                clearInterval(timer);
-                setBottomBanner({
-                  ...bottomBanner,
-                  visible: false,
-                  timerExists: false
-                });
-              }
-            }, 1000);
-          }
-        }}
+      // onScrollBeginDrag={e => {
+      //   if (bottomBanner.animatedStatus === AnimatedStatus.STOP) {
+      //     setBottomBanner({ ...bottomBanner, visible: true });
+      //   }
+      // }}
+      // onScrollEndDrag={e => {
+      //   if (bottomBanner.animatedStatus === AnimatedStatus.STOP) {
+      //     setBottomBanner({ ...bottomBanner, visible: false });
+      //   } else if (!bottomBanner.timerExists) {
+      //     setBottomBanner({ ...bottomBanner, timerExists: true });
+      //   }
+      // }}
       >
         <View
           style={{
@@ -47,7 +61,17 @@ export default (props: BannerAnimationProps) => {
             alignItems: "center"
           }}
         >
-          <Text>test</Text>
+          <Button
+            onPress={() => {
+              if (bottomBanner.animatedStatus === AnimatedStatus.STOP) {
+                setBottomBanner({
+                  ...bottomBanner,
+                  visible: !bottomBanner.visible
+                });
+              }
+            }}
+            title={"test"}
+          />
         </View>
       </ScrollView>
       <BottomBanner

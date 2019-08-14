@@ -28,7 +28,7 @@ export const BottomBanner = (props: BottomBannerFormProps) => {
   useEffect(() => {
     props.onChangeAnimatedStatus &&
       props.onChangeAnimatedStatus({ status: AnimatedStatus.ANIMATING });
-    if (!props.visible) {
+    if (props.visible) {
       setAnimationState({ ...animParameters, show: true });
       Animated.parallel([
         Animated.decay(animParameters.positionY, {
@@ -42,7 +42,7 @@ export const BottomBanner = (props: BottomBannerFormProps) => {
         props.onChangeAnimatedStatus &&
           props.onChangeAnimatedStatus({ status: AnimatedStatus.STOP });
       });
-    } else if (props.visible) {
+    } else {
       setTimeout(() => {
         Animated.parallel([
           Animated.decay(animParameters.positionY, {
@@ -57,7 +57,7 @@ export const BottomBanner = (props: BottomBannerFormProps) => {
           props.onChangeAnimatedStatus &&
             props.onChangeAnimatedStatus({ status: AnimatedStatus.STOP });
         });
-      }, props.fadeOutDelay || 2000);
+      }, props.fadeOutDelay || 500);
     }
   }, [props.visible]);
   return animParameters.show ? (

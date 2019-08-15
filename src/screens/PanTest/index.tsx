@@ -1,1 +1,1 @@
-export { default } from "../../components/RNTraining";
+export { default } from "../../components/PanTest";

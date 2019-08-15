@@ -1,35 +1,41 @@
-import React from 'react';
+import React from "react";
 import {
   createAppContainer,
   createBottomTabNavigator,
-  BottomTabBar,
-} from 'react-navigation';
+  BottomTabBar
+} from "react-navigation";
 
-import {Fadein,Banner} from '../screens'
+import { Fadein, Banner, PanTest } from "../screens";
 // TOP WINDOW
 
 const routeConfig = {
   Fadein: {
     screen: Fadein,
     navigationOptions: () => ({
-      title: 'Fadein'
+      title: "Fadein"
     })
   },
   Banner: {
     screen: Banner,
     navigationOptions: () => ({
-      title: 'Banner'
+      title: "Banner"
     })
   },
+  PanTest: {
+    screen: PanTest,
+    navigationOptions: () => ({
+      title: "PanTest"
+    })
+  }
 };
 
 export const FooterNavigator = createAppContainer(
   createBottomTabNavigator(routeConfig, {
     tabBarOptions: {
-      activeTintColor: 'tomato',
-      inactiveTintColor: 'gray'
+      activeTintColor: "tomato",
+      inactiveTintColor: "gray"
     },
-    tabBarPosition: 'bottom',
+    tabBarPosition: "bottom",
     tabBarComponent: BottomTabBar
     // animationEnabled: false,
     // swipeEnabled: false,

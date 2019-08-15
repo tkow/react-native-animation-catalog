@@ -1,15 +1,13 @@
-
-import { createAppContainer, createSwitchNavigator } from 'react-navigation'
-import { FooterNavigator } from './footer'
-
+import { createAppContainer, createSwitchNavigator } from "react-navigation";
+import { FooterNavigator } from "./footer";
 
 const TopPage = createSwitchNavigator(
   {
-    FooterNavigator,
+    FooterNavigator
   },
   {
-    initialRouteName: 'FooterNavigator'
+    initialRouteName: "FooterNavigator"
   }
-)
+);
 
-export default createAppContainer(TopPage)
+export default createAppContainer(TopPage);

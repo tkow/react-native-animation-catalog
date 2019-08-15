@@ -3,7 +3,8 @@ import {
   Animated,
   GestureResponderEvent,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  ViewStyle
 } from "react-native";
 import { buttonContainerProps, styles } from "./style";
 
@@ -76,7 +77,6 @@ export const BottomBanner = (props: BottomBannerFormProps) => {
             duration: 1000
           })
         ]).start(() => {
-          debugger;
           const nextStatus = { status: AnimatedStatus.STOP };
           setAnimationState({
             ...animParameters,
@@ -89,18 +89,19 @@ export const BottomBanner = (props: BottomBannerFormProps) => {
       }, props.fadeOutDelay || 500);
     }
   }, [props.visible]);
-  return animParameters.show ? (
+  return (
     <Animated.View
       style={[
         styles.bottomBunnerLayout,
         {
-          opacity: animParameters.opacity,
+          opacity: animParameters.opacity as any,
           transform: [
             {
-              translateY: animParameters.positionY
+              translateY: animParameters.positionY as any
             }
-          ]
-        }
+          ],
+          display: animParameters.show ? undefined : "none"
+        } as ViewStyle
       ]}
     >
       <TouchableOpacity
@@ -111,7 +112,8 @@ export const BottomBanner = (props: BottomBannerFormProps) => {
         <Text style={styles.buttonText}>{"test"}</Text>
       </TouchableOpacity>
     </Animated.View>
-  ) : null;
+  );
+  // : null;
 };
 
 BottomBanner.displayName = "BottomBanner";

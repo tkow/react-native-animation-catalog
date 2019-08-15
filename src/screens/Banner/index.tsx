@@ -27,28 +27,25 @@ export default (props: BannerAnimationProps) => {
   const [initialized, initialize] = useState(false);
 
   // useEffect(() => {
-  //   if (!initialized) {
-  //     initialize(true);
-  //   } else if (!bottomBanner.timerExists) {
-  //     // setBottomBanner({
-  //     //   ...bottomBanner,
-  //     //   timerExists: true
-  //     // });
-  //     const timer = setInterval(() => {
-  //       if (
-  //         bottomBanner.animatedStatus === AnimatedStatus.FADEIN_STOP ||
-  //         bottomBanner.animatedStatus === AnimatedStatus.STOP
-  //       ) {
-  //         clearInterval(timer);
-  //         setBottomBanner({
-  //           ...bottomBanner,
-  //           visible: false,
-  //           timerExists: false
-  //         });
-  //       }
-  //     }, 1000);
-  //   }
-  // }, [bottomBanner.timerExists, bottomBanner.animatedStatus]);
+  //   // if (!initialized) {
+  //   //   initialize(true);
+  //   // } else if (!bottomBanner.timerExists) {
+  //   // setBottomBanner({
+  //   //   ...bottomBanner,
+  //   //   timerExists: true
+  //   // });
+  //   const timer = setInterval(() => {
+  //     if (bottomBanner.animatedStatus === AnimatedStatus.FADEIN_STOP) {
+  //       // clearInterval(timer);
+  //       setBottomBanner({
+  //         ...bottomBanner,
+  //         visible: false,
+  //         timerExists: false
+  //       });
+  //     }
+  //   }, 1000);
+  //   // }
+  // }, [bottomBanner.animatedStatus]);
 
   const onScrollBeginDrag = useCallback(
     throttle(e => {

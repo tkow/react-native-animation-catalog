@@ -67,7 +67,8 @@ export const BottomBanner = (props: BottomBannerFormProps) => {
         ...nextStatus
       });
       props.onChangeAnimatedStatus && props.onChangeAnimatedStatus(nextStatus);
-      setTimeout(() => {
+      Animated.sequence([
+        Animated.delay(props.fadeOutDelay || 500),
         Animated.parallel([
           Animated.decay(animParameters.positionY, {
             velocity: 0.1
@@ -76,17 +77,17 @@ export const BottomBanner = (props: BottomBannerFormProps) => {
             toValue: 0,
             duration: 1000
           })
-        ]).start(() => {
-          const nextStatus = { status: AnimatedStatus.STOP };
-          setAnimationState({
-            ...animParameters,
-            ...nextStatus,
-            show: false
-          });
-          props.onChangeAnimatedStatus &&
-            props.onChangeAnimatedStatus(nextStatus);
+        ])
+      ]).start(() => {
+        const nextStatus = { status: AnimatedStatus.STOP };
+        setAnimationState({
+          ...animParameters,
+          ...nextStatus,
+          show: false
         });
-      }, props.fadeOutDelay || 500);
+        props.onChangeAnimatedStatus &&
+          props.onChangeAnimatedStatus(nextStatus);
+      });
     }
   }, [props.visible]);
   return (

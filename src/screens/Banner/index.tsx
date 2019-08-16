@@ -26,30 +26,29 @@ export default (props: BannerAnimationProps) => {
 
   const [initialized, initialize] = useState(false);
 
-  // useEffect(() => {
-  //   // if (!initialized) {
-  //   //   initialize(true);
-  //   // } else if (!bottomBanner.timerExists) {
-  //   // setBottomBanner({
-  //   //   ...bottomBanner,
-  //   //   timerExists: true
-  //   // });
-  //   const timer = setInterval(() => {
-  //     if (bottomBanner.animatedStatus === AnimatedStatus.FADEIN_STOP) {
-  //       // clearInterval(timer);
-  //       setBottomBanner({
-  //         ...bottomBanner,
-  //         visible: false,
-  //         timerExists: false
-  //       });
-  //     }
-  //   }, 1000);
-  //   // }
-  // }, [bottomBanner.animatedStatus]);
+  useEffect(() => {
+    if (!initialized) {
+      initialize(true);
+    } else if (!bottomBanner.timerExists) {
+      setBottomBanner({
+        ...bottomBanner,
+        timerExists: true
+      });
+      const timer = setInterval(() => {
+        if (bottomBanner.animatedStatus === AnimatedStatus.FADEIN_STOP) {
+          clearInterval(timer);
+          setBottomBanner({
+            ...bottomBanner,
+            visible: false,
+            timerExists: false
+          });
+        }
+      }, 1000);
+    }
+  }, [bottomBanner.animatedStatus]);
 
   const onScrollBeginDrag = useCallback(
     throttle(e => {
-      debugger;
       if (bottomBanner.animatedStatus === AnimatedStatus.STOP) {
         setBottomBanner({ ...bottomBanner, visible: true });
       }
@@ -59,7 +58,6 @@ export default (props: BannerAnimationProps) => {
 
   const onScrollEndDrag = useCallback(
     throttle(e => {
-      debugger;
       if (!bottomBanner.timerExists) {
         setBottomBanner({
           ...bottomBanner,
@@ -77,8 +75,8 @@ export default (props: BannerAnimationProps) => {
   return (
     <Fragment>
       <ScrollView
-      // onScrollBeginDrag={onScrollBeginDrag}
-      // onScrollEndDrag={onScrollEndDrag}
+        onScrollBeginDrag={onScrollBeginDrag}
+        onScrollEndDrag={onScrollEndDrag}
       >
         <View
           style={{

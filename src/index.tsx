@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {Fragment} from 'react';
+import React, { Fragment } from "react";
 import MainNavigator from "./navigations";
 import { NavigationContainerComponent } from "react-navigation";
 
@@ -20,13 +20,12 @@ class Navigation extends React.Component<any> {
       />
     );
   };
-
 }
 
 const App = () => {
   return (
     <Fragment>
-      <Navigation/>
+      <Navigation />
     </Fragment>
   );
 };

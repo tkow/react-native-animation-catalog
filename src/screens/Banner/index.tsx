@@ -21,7 +21,8 @@ export default (props: BannerAnimationProps) => {
   const [bottomBanner, setBottomBanner] = useState({
     timerExists: false,
     visible: false,
-    animatedStatus: AnimatedStatus.STOP
+    animatedStatus: AnimatedStatus.STOP,
+    pending: false
   });
 
   const [initialized, initialize] = useState(false);
@@ -35,7 +36,10 @@ export default (props: BannerAnimationProps) => {
         timerExists: true
       });
       const timer = setInterval(() => {
-        if (bottomBanner.animatedStatus === AnimatedStatus.FADEIN_STOP) {
+        if (
+          bottomBanner.animatedStatus === AnimatedStatus.FADEIN_STOP &&
+          !bottomBanner.pending
+        ) {
           clearInterval(timer);
           setBottomBanner({
             ...bottomBanner,
@@ -45,7 +49,7 @@ export default (props: BannerAnimationProps) => {
         }
       }, 1000);
     }
-  }, [bottomBanner.animatedStatus]);
+  }, [bottomBanner.animatedStatus, bottomBanner.pending]);
 
   const onScrollBeginDrag = useCallback(
     throttle(e => {
@@ -53,7 +57,7 @@ export default (props: BannerAnimationProps) => {
         setBottomBanner({ ...bottomBanner, visible: true });
       }
     }, 1000),
-    [bottomBanner.visible, bottomBanner.animatedStatus]
+    [bottomBanner.visible, bottomBanner.animatedStatus, bottomBanner.pending]
   );
 
   const onScrollEndDrag = useCallback(
@@ -68,7 +72,23 @@ export default (props: BannerAnimationProps) => {
     [
       bottomBanner.visible,
       bottomBanner.animatedStatus,
-      bottomBanner.timerExists
+      bottomBanner.timerExists,
+      bottomBanner.pending
+    ]
+  );
+
+  const onSwitchPending = useCallback(
+    throttle(e => {
+      setBottomBanner({
+        ...bottomBanner,
+        pending: !bottomBanner.pending
+      });
+    }, 1000),
+    [
+      bottomBanner.visible,
+      bottomBanner.animatedStatus,
+      bottomBanner.timerExists,
+      bottomBanner.pending
     ]
   );
 
@@ -97,6 +117,7 @@ export default (props: BannerAnimationProps) => {
             }}
             title={"test"}
           />
+          <Button onPress={onSwitchPending} title={"pending"} />
         </View>
       </ScrollView>
       <BottomBanner
@@ -106,6 +127,7 @@ export default (props: BannerAnimationProps) => {
         }}
         onChangeAnimatedStatus={result => {
           debugger;
+
           setBottomBanner({ ...bottomBanner, animatedStatus: result.status });
         }}
       />
